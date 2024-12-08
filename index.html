@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487.3">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Colorful Tetris&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: purple; /* Updated background color */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>canvas {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid black;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #000;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: red;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>#score {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-size: 24px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white; /* Make score text readable on purple */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1 style="color: white;"&gt;Colorful Tetris&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;canvas id="tetris-canvas" width="300" height="600"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;button id="play-button"&gt;Play Tetris&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="score"&gt;Score: 0&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('tetris-canvas');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const playButton = document.getElementById('play-button');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const scoreDisplay = document.getElementById('score');</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const grid = 30;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let board = Array.from({ length: 20 }, () =&gt; Array(10).fill(0));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentPiece = null;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let pieceX = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let pieceY = 0;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const colors = ['cyan', 'yellow', 'purple', 'green', 'red', 'blue', 'orange'];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const tetrominoes = [</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[1, 1, 1, 1]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[1, 1], [1, 1]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[0, 1, 0], [1, 1, 1]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[1, 1, 0], [0, 1, 1]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[0, 1, 1], [1, 1, 0]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[1, 0, 0], [1, 1, 1]],</p>
+<p class="p1"><span class="Apple-converted-space">            </span>[[0, 0, 1], [1, 1, 1]]</p>
+<p class="p1"><span class="Apple-converted-space">        </span>];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawBoard() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.clearRect(0, 0, canvas.width, canvas.height);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>board.forEach((row, y) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>row.forEach((cell, x) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (cell) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>ctx.fillStyle = colors[cell - 1];</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>ctx.fillRect(x * grid, y * grid, grid, grid);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawPiece() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = currentPiece.color;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentPiece.shape.forEach((row, y) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>row.forEach((cell, x) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (cell) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>ctx.fillRect((pieceX + x) * grid, (pieceY + y) * grid, grid, grid);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function spawnPiece() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const index = Math.floor(Math.random() * tetrominoes.length);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentPiece = {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>shape: tetrominoes[index],</p>
+<p class="p1"><span class="Apple-converted-space">                </span>color: colors[index]</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pieceX = Math.floor(board[0].length / 2) - Math.floor(currentPiece.shape[0].length / 2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pieceY = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function movePiece(dx, dy) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pieceX += dx;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>pieceY += dy;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (checkCollision()) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>pieceX -= dx;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>pieceY -= dy;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return true;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function rotatePiece() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rotated = currentPiece.shape[0].map((_, i) =&gt; currentPiece.shape.map(row =&gt; row[i]).reverse());</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const originalShape = currentPiece.shape;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentPiece.shape = rotated;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (checkCollision()) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>currentPiece.shape = originalShape;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function checkCollision() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return currentPiece.shape.some((row, y) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return row.some((cell, x) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (cell) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>const newX = pieceX + x;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>const newY = pieceY + y;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>newX &lt; 0 ||</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>newX &gt;= board[0].length ||</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>newY &gt;= board.length ||</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>(newY &gt;= 0 &amp;&amp; board[newY][newX])</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>) {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>return true;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>return false;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function placePiece() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentPiece.shape.forEach((row, y) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>row.forEach((cell, x) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (cell) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>board[pieceY + y][pieceX + x] = colors.indexOf(currentPiece.color) + 1;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>clearLines();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>spawnPiece();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (checkCollision()) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('Game Over!');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>resetGame();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function clearLines() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let y = board.length - 1; y &gt;= 0; y--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (board[y].every(cell =&gt; cell &gt; 0)) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>board.splice(y, 1);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>board.unshift(Array(10).fill(0));</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>score += 100;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>scoreDisplay.textContent = `Score: ${score}`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>y++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resetGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>board = Array.from({ length: 20 }, () =&gt; Array(10).fill(0));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scoreDisplay.textContent = 'Score: 0';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>spawnPiece();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!movePiece(0, 1)) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>placePiece();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawBoard();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawPiece();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>playButton.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>resetGame();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>spawnPiece();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.addEventListener('keydown', event =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (event.key === 'ArrowLeft') movePiece(-1, 0);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (event.key === 'ArrowRight') movePiece(1, 0);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (event.key === 'ArrowDown') movePiece(0, 1);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (event.key === 'ArrowUp') rotatePiece();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawBoard();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawPiece();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setInterval(updateGame, 500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
